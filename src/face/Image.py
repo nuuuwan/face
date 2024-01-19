@@ -14,7 +14,7 @@ class Image(File):
     @property
     def img(self):
         return cv2.imread(self.path)
-    
+
     def get_faces(self) -> list['Image']:
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + 'haarcascade_profileface.xml'
