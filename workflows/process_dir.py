@@ -1,19 +1,20 @@
 import os
+import shutil
 import sys
-
+import random
 from utils import Log
 
 from face import Video
 
 log = Log('face')
-
+random.seed(0)
 
 def main(dir_path: str):
     dir_face = dir_path + '-face'
     if not os.path.exists(dir_face):
         os.makedirs(dir_face)
-    os.startfile(dir_face)
-
+    
+    i = 0
     for file_name in os.listdir(dir_path):
         file_path = os.path.join(dir_path, file_name)
         if not Video.is_video(file_path):
@@ -22,18 +23,22 @@ def main(dir_path: str):
 
         dir_video = os.path.join(dir_face, file_name + '-files')
 
-        if not os.path.exists(dir_video):
-            os.makedirs(dir_video)
+        if os.path.exists(dir_video):
+            shutil.rmtree(dir_video)
+        os.makedirs(dir_video)
 
         video = Video.from_file(file_path)
         image_list = video.get_random_images()
-        for i, image in enumerate(image_list):
-            image_path = os.path.join(dir_video, f'{i:03d}.png')
+        for j, image in enumerate(image_list):
+            image_path = os.path.join(dir_video, f'{j:03d}.png')
             image.moveto(image_path)
-            log.debug(f'Saved {image.path}.')
+            image.get_faces()
+        i += 1
+        if i >= 5:
+            break
 
-        break
-
+    
+    os.startfile(dir_face)
 
 if __name__ == '__main__':
     dir_path = sys.argv[1]

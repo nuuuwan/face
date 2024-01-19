@@ -11,7 +11,7 @@ log = Log('Video')
 
 
 class Video(File):
-    DEFAULT_NUM_FRAMES = 3
+    DEFAULT_NUM_FRAMES = 10
 
     @staticmethod
     def is_video(file_path: str) -> bool:
